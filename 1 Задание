@@ -1,0 +1,46 @@
+from collections import deque
+
+def take_orders():
+    dishes = ["Борщ", "Пицца", "Роллы", "Шашлык", "Салат Цезарь"]
+    order_list = deque()
+
+    while True:
+        print("\nМеню:")
+        for i, dish in enumerate(dishes):
+            print(f"{i+1}. {dish}")
+
+        user_choice = input("\nВыберите блюдо (введите номер) или введите 'q' для завершения: ")
+
+        if user_choice == 'q':
+            return order_list
+
+        try:
+            index = int(user_choice) - 1
+            chosen_dish = dishes[index]
+            order_list.append(chosen_dish)
+            print(f"Заказ принят: {chosen_dish}")
+        except (ValueError, IndexError):
+            print("Неверный ввод. Попробуйте снова.")
+
+def process_orders(order_list):
+    while order_list:
+        current_order = order_list[0]
+        is_ready = input(f"Готов ли заказ '{current_order}'? (да/нет): ").lower().strip()
+
+        if is_ready == "да":
+            order_list.popleft()
+            print(f"Заказ '{current_order}' выполнен!")
+        elif is_ready == "нет":
+            print("Программа завершена. Оставшиеся заказы:")
+            for order in order_list:
+                print(order)
+            break
+        else:
+            print("Неправильный ответ. Повторите попытку.")
+
+def main():
+    orders = take_orders()
+    process_orders(orders)
+
+if __name__ == "__main__":
+    main()
