@@ -1,0 +1,39 @@
+def knapsack(w, p, cap):
+    dp = [0] * (cap + 1)
+    t = [-1] * (cap + 1)
+    
+    for i in range(len(p)):
+        for c in range(w[i], cap + 1):
+            if dp[c] < dp[c - w[i]] + p[i]:
+                dp[c] = dp[c - w[i]] + p[i]
+                t[c] = i
+    
+    res = {}
+    rem = cap
+    while rem > 0:
+        idx = t[rem]
+        if idx != -1:
+            if idx in res:
+                res[idx] += 1
+            else:
+                res[idx] = 1
+            rem -= w[idx]
+        else:
+            break
+    
+    return dp[cap], res
+
+w = []
+p = []
+for _ in range(3):
+    w.append(int(input("Вес товара: ")))
+    p.append(int(input("Цена товара: ")))
+
+cap = 100
+
+max_val, items = knapsack(w, p, cap)
+print(f"Макс. стоимость: {max_val}")
+
+print("Выбранные товары:")
+for idx, cnt in items.items():
+    print(f"{cnt} шт. товара #{idx + 1}")
